@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -25,19 +25,19 @@ function App() {
 
 
   useEffect(() => {
-    fetch("https://localhost:7254/CartProduct")
+    fetch("https://localhost:7254/tooted")
       .then(res => res.json())
       .then(json => setTooted(json));
   }, []);
 
   useEffect(() => {
-    fetch("https://localhost:7254/Category")
+    fetch("https://localhost:7254/parcelmachine")
       .then(res => res.json())
       .then(json => setPakiautomaadid(json));
   }, []);
 
   useEffect(() => {
-    fetch("https://localhost:7254/Order")
+    fetch("https://localhost:7254/nordpool")
       .then(res => res.json())
       .then(json => {
         setFi(json.data.fi);
@@ -77,7 +77,7 @@ function App() {
 
 
   function kustuta(index) {
-    fetch("https://localhost:7254/tooted/Product/" + index, {"method": "DELETE"})
+    fetch("https://localhost:7254/tooted/kustuta/" + index, {"method": "DELETE"})
       .then(res => res.json())
       .then(json => setTooted(json));
   }
@@ -87,6 +87,7 @@ function App() {
     const uusToode = {
       "id": Number(idRef.current.value),
       "name": nameRef.current.value,
+      
       "price": Number(priceRef.current.value),
       "isActive": isActiveRef.current.checked
     }
@@ -104,9 +105,8 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <label>ID</label> <br />
-      <input ref={idRef} type="number" /> <br />
+    
+    <div>
       <label>Nimi</label> <br />
       <input ref={nameRef} type="text" /> <br />
       <label>Hind</label> <br />
@@ -114,47 +114,13 @@ function App() {
       <label>Aktiivne</label> <br />
       <input ref={isActiveRef} type="checkbox" /> <br />
       <button onClick={() => lisa()}>Lisa</button>
-      {tooted.map((toode, index) => 
-        <div>
-          <div>{toode.id}</div>
-          <div>{toode.name}</div>
-          <div>{toode.price}</div>
-          <button onClick={() => kustuta(index)}>x</button>
-        </div>)}
-      <button onClick={() => dollariteks()}>Muuda dollariteks</button>
-      <br />
-      <select>
-        {pakiautomaadid.map(automaat => 
-            <option>
-                {automaat.NAME}
-            </option>)}
-      </select>
-
-      <button onClick={() => setChosenCountry("fi")}>Soome</button>
-      <button onClick={() => setChosenCountry("ee")}>Eesti</button>
-      <button onClick={() => setChosenCountry("lv")}>Läti</button>
-      <button onClick={() => setChosenCountry("lt")}>Leedu</button>
-      <br />
-      <input ref={startRef} onChange={updateStart} type="datetime-local" />
-      <input ref={endRef} onChange={updateEnd} type="datetime-local" />
-      {prices.length > 0 && 
-      <table style={{marginLeft: "100px"}}>
-        <thead>
-          <th style={{border: "1px solid #ddd", padding: "12px", backgroundColor: "#04AA6D"}}>Ajatempel</th>
-          <th style={{border: "1px solid #ddd", padding: "12px", backgroundColor: "#04AA6D"}}>Hind</th>
-        </thead>
-        <tbody>
-          <td style={{position: "absolute", left: "30px"}}>{chosenCountry}</td>
-          {prices.map(data => 
-          <tr key={data.timestamp}>
-            <td style={{border: "1px solid #ddd", padding: "8px"}}>{new Date(data.timestamp * 1000).toISOString()}</td>
-            <td style={{border: "1px solid #ddd", padding: "8px"}}>{data.price}</td>
-          </tr>)}
-        </tbody>
-      </table>}
-
     
-    </div>
+    {prices.length > 0 && 
+    <table style={{marginLeft: "100px"}}>
+     
+    </table>}
+ 
+  </div>
     
   );
 }
